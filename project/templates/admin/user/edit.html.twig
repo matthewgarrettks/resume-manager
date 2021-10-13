@@ -1,0 +1,10 @@
+{% extends 'layouts/admin-standard.html.twig' %}
+{% block title %}Edit User{% endblock %}
+{% block content %}
+    <h1>Edit User</h1>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn btn-success">Save</button>
+    <a href="{{ path('admin_user_index') }}"  class="btn btn-info">Back to Users</a>
+    {{ form_end(form) }}
+{% endblock %}

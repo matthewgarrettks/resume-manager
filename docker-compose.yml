@@ -1,0 +1,41 @@
+version: "3.6"
+services:
+  app:
+    build: ./.docker/app
+    volumes:
+      - ./:/app:delegated
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      XDEBUG_ENABLE: 1
+      XDEBUG_CONFIG: "client_host=xdebug.internal start_with_request=yes"
+      XDEBUG_MODE: "develop"
+      XDEBUG_SESSION: "local"
+      APP_ENV: dev
+      APP_DEBUG: 1
+    depends_on:
+      - db
+  db:
+    image: mysql:5.7
+    volumes:
+      - database:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: app
+      MYSQL_USER: app
+      MYSQL_PASSWORD: app
+      MYSQL_ROOT_PASSWORD: root
+  mail:
+    image: maildev/maildev
+    command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
+    ports:
+      - "1080:80"
+volumes:
+  database: {}
+networks:
+  default:
+    driver_opts:
+      com.docker.network.bridge.host_binding_ipv4: 127.0.0.1
+      com.docker.network.driver.mtu: 1400

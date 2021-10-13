@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Skill{% endblock %}
+
+{% block body %}
+    <h1>Edit Skill</h1>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn btn-success">Save</button>
+    <a href="{{ path('skill_index') }}"  class="btn btn-info">Back to Profile</a>
+    {{ form_end(form) }}
+{% endblock %}

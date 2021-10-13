@@ -1,0 +1,14 @@
+#!/usr/bin/with-contenv sh
+
+set -eux
+
+is_dev=${IS_DEV:-"0"}
+
+if [ "${is_dev}" = "0" ]; then
+    exit 0
+fi
+
+usermod -u 1000 app
+groupmod -g 1000 app
+
+chown -R app:app /app
