@@ -31,18 +31,21 @@ jobs:
         run: npm ci
       - name: Run build
         run: npm run build
-      - name: Commit files
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add -f assets/css/
-          git commit -m "chore: build JS/CSS assets"
+        
       - name: Create Branch
         uses: peterjgrainger/action-create-branch@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           branch: ${{ github.ref }}-deploy
+
+      - name: Commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -f assets/css/
+          git commit -m "chore: build JS/CSS assets"
+
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
