@@ -47,7 +47,7 @@ jobs:
           branch: ${{ github.ref_name }}-deploy
 
       - name: Push changes
-        uses: ad-m/github-push-action@master
+        uses: matthewgarrettks/github-push-action@master
         with:
           branch: ${{ github.ref_name }}-deploy
           force: true
