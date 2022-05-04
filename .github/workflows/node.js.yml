@@ -28,3 +28,24 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run build --if-present
+
+    - name: Commit files
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add -f assets/css/
+        git commit -m "chore: build JS/CSS assets"
+
+    - name: Create deploy branch
+      uses: peterjgrainger/action-create-branch@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        branch: ${{ github.ref }}-deploy
+
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        branch: ${{ github.ref }}-deploy
+        force: true
+        github_token: ${{ secrets.GITHUB_TOKEN }}
