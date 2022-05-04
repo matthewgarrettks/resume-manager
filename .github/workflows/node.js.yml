@@ -47,6 +47,7 @@ jobs:
 
     - name: Commit files
       run: |
+        git branch --show-current
         git add -f assets/css/
         git commit -m "chore: build JS/CSS assets"
-        git branch --show-current|xargs printf -- '%s-deploy'|xargs git push origin
+        git branch --show-current|xargs git push origin
