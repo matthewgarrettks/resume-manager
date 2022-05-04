@@ -42,4 +42,5 @@ jobs:
         git config --local user.name "GitHub Action"
         git add -f assets/css/
         git commit -m "chore: build JS/CSS assets"
-        git push origin ${{ github.ref }}-deploy
+        git branch
+        git push origin
