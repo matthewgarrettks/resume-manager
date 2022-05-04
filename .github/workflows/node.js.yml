@@ -21,13 +21,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: NPM Build using ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
 
     - name: Create deploy branch
       uses: peterjgrainger/action-create-branch@master
@@ -36,11 +29,25 @@ jobs:
       with:
         branch: ${{ github.ref }}-deploy
 
-    - name: Commit files
+    - name: git config for deploy
       run: |
+        git config --local user.email "action@github.co
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git branch --show-current|xargs printf -- '%s-deploy'|xargs git checkout -b 
+
+    - name: git checkout deploy branch
+      run: git branch --show-current|xargs printf -- '%s-deploy'|xargs git checkout -b 
+
+    - name: NPM Build using ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run build --if-present
+
+    - name: Commit files
+      run: |
         git add -f assets/css/
         git commit -m "chore: build JS/CSS assets"
         git branch --show-current|xargs printf -- '%s-deploy'|xargs git push origin
