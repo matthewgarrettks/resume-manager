@@ -44,7 +44,6 @@ jobs:
 
     - name: git checkout deploy branch
       run: |
-        git branch --show-current|xargs printf -- ' :%s-deploy'|xargs git push origin 
         git branch --show-current|xargs printf -- ' %s-deploy'|xargs git checkout -b
 
     - name: Commit files
@@ -52,4 +51,4 @@ jobs:
         git branch --show-current
         git add -f assets/css/
         git commit -m "chore: build JS/CSS assets"
-        git branch --show-current|xargs git push origin
+        git branch --show-current|xargs git push origin --force
