@@ -31,7 +31,6 @@ jobs:
 
     - name: git config for deploy
       run: |
-        git config --local user.email "action@github.co
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
 
