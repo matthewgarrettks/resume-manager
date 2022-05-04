@@ -20,35 +20,32 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v3
-
-    - name: NPM Build using ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-
-    - name: Create deploy branch
-      uses: peterjgrainger/action-create-branch@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        branch: ${{ github.ref }}-deploy
-
-    - name: git config for deploy
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-
-    - name: git checkout deploy branch
-      run: |
-        git branch --show-current|xargs printf -- ' %s-deploy'|xargs git checkout -b
-
-    - name: Commit files
-      run: |
-        git branch --show-current
-        git add -f assets/css/
-        git commit -m "chore: build JS/CSS assets"
-        git branch --show-current|xargs git push origin --force
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '10'
+      - name: Install packages
+        run: npm ci
+      - name: Run build
+        run: npm run build
+      - name: Commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -f assets/css/
+          git commit -m "chore: build JS/CSS assets"
+      - name: Create Branch
+        uses: peterjgrainger/action-create-branch@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          branch: ${{ github.ref }}-deploy
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          branch: ${{ github.ref }}-deploy
+          force: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
