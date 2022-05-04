@@ -41,7 +41,8 @@ jobs:
 
       - name: Commit files
         run: |
-          git branch --show-current|xargs printf -- ' refs/heads/%s-deploy'|xargs git checkout
+          git branch
+          git branch --show-current|xargs printf -- ' %s-deploy'|xargs git checkout
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add -f assets/css/
