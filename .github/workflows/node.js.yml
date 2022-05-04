@@ -35,7 +35,9 @@ jobs:
         git config --local user.name "GitHub Action"
 
     - name: git checkout deploy branch
-      run: git branch --show-current|xargs printf -- '%s-deploy'|xargs git checkout -b 
+      run: |
+      git branch --show-current|xargs printf -- ' :%s-deploy'|xargs git push origin 
+      git branch --show-current|xargs printf -- ' %s-deploy'|xargs git checkout -b
 
     - name: NPM Build using ${{ matrix.node-version }}
       uses: actions/setup-node@v3
