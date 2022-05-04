@@ -22,6 +22,14 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: NPM Build using ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run build --if-present
+
     - name: Create deploy branch
       uses: peterjgrainger/action-create-branch@master
       env:
@@ -38,14 +46,6 @@ jobs:
       run: |
         git branch --show-current|xargs printf -- ' :%s-deploy'|xargs git push origin 
         git branch --show-current|xargs printf -- ' %s-deploy'|xargs git checkout -b
-
-    - name: NPM Build using ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
 
     - name: Commit files
       run: |
